@@ -89,6 +89,18 @@
 		if (speech_sound && (get_dist(speaker, src) <= world.view && src.z == speaker.z))
 			var/turf/source = speaker? get_turf(speaker) : get_turf(src)
 			src.playsound_local(source, speech_sound, sound_vol, 1)
+		if(src.is_species(SPECIES_RESOMI) && ishuman(src))
+			var/mob/living/carbon/human/H = src
+			if(H.next_sonar_ping > world.time)
+				H.next_sonar_ping = 0
+				H.adjustBruteLoss(5)
+				//H.Stun(5)
+				H.flash_eyes()
+				H.Weaken(5)
+				H.drop_l_hand()
+				H.drop_r_hand()
+				to_chat(H, "<span class='warning'>Your sensitive ears are overwhelmed!</span>")
+
 
 /mob/proc/on_hear_say(var/message)
 	to_chat(src, message)
